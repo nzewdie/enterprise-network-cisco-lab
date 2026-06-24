@@ -52,12 +52,12 @@ Dynamic IP distribution handles automated allocation with the following constrai
 |:---|:---|:---|:---|:---|:---|
 | **CS1** | `G1/0/1` | Copper Cross-Over | **CS2** | `G1/0/1` | EtherChannel (`Po1` / LACP Active) |
 | **CS1** | `G1/0/2` | Copper Cross-Over | **CS2** | `G1/0/2` | EtherChannel (`Po1` / LACP Active) |
-| **CS1** | `G1/0/3` | Copper Cross-Over | **AC1** | `G0/1` | 802.1Q Trunk (Native VLAN 99) |
-| **CS1** | `G1/0/4` | Copper Cross-Over | **AC2** | `G0/1` | 802.1Q Trunk (Native VLAN 99) |
-| **CS1** | `G1/0/5` | Copper Straight | **ER** | `G0/0/0` | Routed Port (`no switchport`) |
-| **CS2** | `G1/0/3` | Copper Cross-Over | **AC1** | `G0/2` | 802.1Q Trunk (Native VLAN 99) |
-| **CS2** | `G1/0/4` | Copper Cross-Over | **AC2** | `G0/2` | 802.1Q Trunk (Native VLAN 99) |
-| **CS2** | `G1/0/5` | Copper Straight | **ER** | `G0/0/1` | Routed Port (`no switchport`) |
+| **CS1** | `G1/0/23` | Copper Cross-Over | **AC1** | `G0/1` | 802.1Q Trunk (Native VLAN 99) |
+| **CS1** | `G1/0/24` | Copper Cross-Over | **AC2** | `G0/1` | 802.1Q Trunk (Native VLAN 99) |
+| **CS1** | `G1/0/3` | Copper Straight | **ER** | `G0/0/0` | Routed Port (`no switchport`) |
+| **CS2** | `G1/0/23` | Copper Cross-Over | **AC1** | `G0/2` | 802.1Q Trunk (Native VLAN 99) |
+| **CS2** | `G1/0/24` | Copper Cross-Over | **AC2** | `G0/2` | 802.1Q Trunk (Native VLAN 99) |
+| **CS2** | `G1/0/3` | Copper Straight | **ER** | `G0/0/1` | Routed Port (`no switchport`) |
 | **AC1** | `F0/1` | Copper Straight | **PC-1** | `FastEthernet0` | Access Port (VLAN 10) |
 | **AC1** | `F0/2` | Copper Straight | **PC-2** | `FastEthernet0` | Access Port (VLAN 20) |
 | **AC2** | `F0/1` | Copper Straight | **PC-3** | `FastEthernet0` | Access Port (VLAN 10) |
