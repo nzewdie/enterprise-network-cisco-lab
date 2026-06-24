@@ -1,0 +1,122 @@
+! ==============================================================================
+! CORE SWITCH 2 (CS2) RUNNING CONFIGURATION
+! Enterprise Network Multi-Switch Enterprise Lab
+! ==============================================================================
+version 16.3.2
+hostname CS2
+
+! --- Core Switching Services ---
+ip routing
+spanning-tree mode pvst
+
+! --- Dynamic Infrastructure DHCP Server Pools ---
+ip dhcp excluded-address 192.168.10.1 192.168.10.5
+ip dhcp excluded-address 192.168.20.1 192.168.20.5
+!
+ip dhcp pool Vlan20Pool
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 8.8.8.8
+
+! --- Virtual Routing Loopback ---
+interface Loopback0
+ description OSPF Router-ID Target
+ ip address 3.3.3.3 255.255.255.255
+
+! --- EtherChannel Logical Interface (Link to CS1) ---
+interface Port-channel1
+ description LACP Core Backbone Trunk Link to CS1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+
+! --- Physical EtherChannel Members (Link to CS1) ---
+interface GigabitEthernet1/0/1
+ description Physical Trunk Member to CS1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ channel-protocol lacp
+ channel-group 1 mode active
+
+interface GigabitEthernet1/0/2
+ description Physical Trunk Member to CS1
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+ channel-protocol lacp
+ channel-group 1 mode active
+
+! --- LAN Interconnect Link (Routed Port to Edge Router ER) ---
+interface GigabitEthernet1/0/3
+ description Routed Uplink Interface to ER
+ no switchport
+ ip address 10.0.2.2 255.255.255.252
+ speed auto
+ duplex auto
+
+! --- Downstream Access Layer Uplinks (Trunks to AC1 and AC2) ---
+interface GigabitEthernet1/0/23
+ description Trunk Interface to AC1 Access Switch
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+
+interface GigabitEthernet1/0/24
+ description Trunk Interface to AC2 Access Switch
+ switchport mode trunk
+ switchport trunk native vlan 99
+ switchport trunk allowed vlan 10,20,99
+
+! --- Switch Virtual Interfaces (SVIs) & HSRP Gateways ---
+! VLAN 10: Client Data Subnet
+interface Vlan10
+ description Corporate Data SVI Gateway
+ ip address 192.168.10.3 255.255.255.0
+ standby 10 ip 192.168.10.1
+
+! VLAN 20: HR Subnet (Active Gateway Instance)
+interface Vlan20
+ description Corporate HR SVI Gateway
+ ip address 192.168.20.3 255.255.255.0
+ standby 20 ip 192.168.20.1
+ standby 20 priority 110
+ standby 20 preempt
+
+! VLAN 99: Out-of-Band Management Segment
+interface Vlan99
+ description Local Infrastructure Management SVI
+ ip address 192.168.99.3 255.255.255.0
+
+! --- Dynamic Interior Routing Engine ---
+router ospf 1
+ router-id 3.3.3.3
+ log-adjacency-changes
+ passive-interface Vlan10
+ passive-interface Vlan20
+ passive-interface Vlan99
+ network 10.0.2.0 0.0.0.3 area 0
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+ network 192.168.99.0 0.0.0.255 area 0
+ network 3.3.3.3 0.0.0.0 area 0
+
+! --- Infrastructure Security Access Control Lists ---
+! SSH Management Restriction Standard ACL
+ip access-list standard MGMT
+ permit 192.168.99.0 0.0.0.255
+ deny any
+
+! --- Console & Virtual Terminal Line Security ---
+line con 0
+ logging synchronous
+
+line vty 0 4
+ access-class MGMT in
+ login
+
+line vty 5 15
+ access-class MGMT in
+ login
+
+end

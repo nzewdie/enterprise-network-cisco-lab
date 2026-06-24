@@ -1,0 +1,75 @@
+! ==============================================================================
+! CLIENT EDGE ROUTER (ER) RUNNING CONFIGURATION
+! Enterprise Network Multi-Switch Enterprise Lab
+! ==============================================================================
+version 15.1
+hostname ER
+
+! --- Infrastructure Base Engine ---
+ip cef
+spanning-tree mode pvst
+
+! --- Virtual Routing Loopback ---
+interface Loopback0
+ description OSPF Router-ID Target
+ ip address 1.1.1.1 255.255.255.255
+
+! --- WAN Interface (Internet Facing) ---
+interface GigabitEthernet0/0
+ description Public Edge Link to ISP
+ ip address 203.0.113.2 255.255.255.252
+ ip nat outside
+ ip access-group OutIN in
+ speed auto
+ duplex auto
+
+! --- LAN Interconnect Link (To Core-01 Switch) ---
+interface GigabitEthernet0/1
+ description Internal Transit Link to CS1
+ ip address 10.0.1.1 255.255.255.252
+ ip nat inside
+ speed auto
+ duplex auto
+
+! --- LAN Interconnect Link (To Core-02 Switch) ---
+interface GigabitEthernet0/2
+ description Internal Transit Link to CS2
+ ip address 10.0.2.1 255.255.255.252
+ ip nat inside
+ speed auto
+ duplex auto
+
+! --- Dynamic Interior Routing Engine ---
+router ospf 1
+ router-id 1.1.1.1
+ log-adjacency-changes
+ network 10.0.1.0 0.0.0.3 area 0
+ network 10.0.2.0 0.0.0.3 area 0
+ network 1.1.1.1 0.0.0.0 area 0
+ default-information originate
+
+! --- Static Default Exterior Gateway ---
+ip classless
+ip route 0.0.0.0 0.0.0.0 203.0.113.1
+
+! --- Network Address Translation Engine ---
+ip nat inside source list 10 interface GigabitEthernet0/0 overload
+
+! --- Security Access Control Lists ---
+! NAT Internal Boundary Definition
+access-list 10 permit 192.168.0.0 0.0.255.255
+
+! WAN Perimeter Firewall Enforcement
+ip access-list extended OutIN
+ permit tcp any any established
+ permit icmp any any echo-reply
+ permit icmp any any unreachable
+ deny ip any any
+
+! --- Terminal Line Security ---
+line con 0
+line aux 0
+line vty 0 4
+ login
+
+end
