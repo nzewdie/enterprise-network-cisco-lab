@@ -25,7 +25,7 @@ These routed links use isolated point-to-point subnets to form the routing backb
 | **CS1 Uplink** | CS1 $\leftrightarrow$ ER | `10.1.1.0/30` | `255.255.255.252` | `10.1.1.2` (CS1) | `10.1.1.1` (ER) |
 | **CS2 Uplink** | CS2 $\leftrightarrow$ ER | `10.1.2.0/30` | `255.255.255.252` | `10.1.2.2` (CS2) | `10.1.2.1` (ER) |
 | **Public WAN Edge** | ER $\leftrightarrow$ ISP | `203.0.113.0/30` | `255.255.255.252` | `203.0.113.2` (ER) | `203.0.113.1` (ISP) |
-| **ISP Server Link** | ISP $\leftrightarrow$ Web Server | `198.51.100.0/24` | `255.255.255.0` | `198.51.100.1` (ISP) | `198.51.100.2` (Server) |
+| **ISP Server Link** | ISP $\leftrightarrow$ Web Server | `192.51.100.0/24` | `255.255.255.0` | `192.51.100.1` (ISP) | `192.51.100.2` (Server) |
 
 ---
 
