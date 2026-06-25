@@ -45,7 +45,7 @@ Extended IP access list OUTSIDE-IN
 ```
 
 ## 🚀 How to Run the Lab
-1. Download the `[Enterprise_lab_packet.pkt](https://github.com/nzewdie/enterprise-network-cisco-lab/blob/main/Enterprise_lab_packet.pkt)` file from the root of this repository.
+1. Download the [Enterprise_lab_packet.pkt](https://github.com/nzewdie/enterprise-network-cisco-lab/blob/main/Enterprise_lab_packet.pkt) file from the root of this repository.
 2. Open the file using **Cisco Packet Tracer** (v8.2 or newer recommended).
 3. Wait approximately 30 seconds for Spanning Tree Protocol (STP) and LACP to converge (all link lights will turn green).
 4. Open a desktop web browser on **PC-1** or **PC-3** and navigate to `198.51.100.10` to test full Inter-VLAN routing, HSRP failover, and NAT functionality.
